@@ -28,6 +28,7 @@ jobs:
                            autoconf \
                            libtool \
                            ccache \
+                           libcurl4-openssl-dev \
                            libgtest-dev \
                            libxcb-shm0 \
                            libglu1-mesa-dev \
