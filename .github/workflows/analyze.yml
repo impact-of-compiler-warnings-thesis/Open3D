@@ -42,7 +42,12 @@ jobs:
       - name: Generate build files
         run: |
           mkdir build && cd build
-          cmake .. -GNinja -DBUILD_SHARED_LIBS=ON -DBUILD_BENCHMARKS=ON -DBUILD_UNIT_TESTS=ON -DBUILD_VTK_FROM_SOURCE=ON -BUILD_CURL_FROM_SOURCE=ON
+          cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug \
+                           -DBUILD_SHARED_LIBS=ON \
+                           -DBUILD_BENCHMARKS=ON \
+                           -DBUILD_UNIT_TESTS=ON \
+                           -DBUILD_VTK_FROM_SOURCE=ON \
+                           -DBUILD_CURL_FROM_SOURCE=ON
       - name: Run build-wrapper
         run: build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ninja -C build
       - name: Run sonar-scanner
