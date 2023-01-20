@@ -51,7 +51,7 @@ jobs:
           cd VTK-9.2.5
           mkdir build && cd build
           cmake ..
-          make
+          make -j$(nproc)
           sudo make install
       - name: Generate build files
         run: |
@@ -60,11 +60,11 @@ jobs:
                            -DBUILD_SHARED_LIBS=OFF \
                            -DBUILD_BENCHMARKS=ON \
                            -DBUILD_UNIT_TESTS=ON \
-                           -DBUILD_VTK_FROM_SOURCE=ON \
+                           -DBUILD_VTK_FROM_SOURCE=OFF \
                            -DBUILD_FILAMENT_FROM_SOURCE=ON \
                            -DBUILD_CURL_FROM_SOURCE=ON
       - name: Run build-wrapper
-        run: build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ninja -C build
+        run: build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ninja -j$(nproc) -C build
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
