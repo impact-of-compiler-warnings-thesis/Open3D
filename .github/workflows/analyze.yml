@@ -24,16 +24,14 @@ jobs:
                            clang \
                            xorg-dev \
                            python3-dev \
+                           python3-venv \
                            gfortran \
                            autoconf \
                            ccache \
                            mesa-common-dev \
                            mesa-utils \
                            freeglut3-dev \
-                           python3-dev \
-                           python3-venv \
                            libtool \
-                           libcurl4-openssl-dev \
                            libgtest-dev \
                            libxcb-shm0 \
                            libglu1-mesa-dev \
@@ -44,27 +42,18 @@ jobs:
                            libtbb-dev \
                            libosmesa6-dev \
                            libudev-dev
-      - name: Build VTK
-        run: |
-          wget https://www.vtk.org/files/release/9.2/VTK-9.2.5.tar.gz
-          tar -zxvf VTK-9.2.5.tar.gz
-          cd VTK-9.2.5
-          mkdir build && cd build
-          cmake ..
-          make -j$(nproc)
-          sudo make install
       - name: Generate build files
         run: |
           mkdir build && cd build
-          cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug \
-                           -DBUILD_SHARED_LIBS=OFF \
-                           -DBUILD_BENCHMARKS=ON \
-                           -DBUILD_UNIT_TESTS=ON \
-                           -DBUILD_VTK_FROM_SOURCE=OFF \
-                           -DBUILD_FILAMENT_FROM_SOURCE=ON \
-                           -DBUILD_CURL_FROM_SOURCE=ON
+          cmake .. -DCMAKE_BUILD_TYPE=Debug \
+                   -DBUILD_SHARED_LIBS=OFF \
+                   -DBUILD_UNIT_TESTS=ON \
+                   -DBUILD_BENCHMARKS=ON \
+                   -DBUILD_VTK_FROM_SOURCE=ON \
+                   -DBUILD_FILAMENT_FROM_SOURCE=ON \
+                   -DBUILD_CURL_FROM_SOURCE=ON
       - name: Run build-wrapper
-        run: build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ninja -j$(nproc) -C build
+        run: build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make -j$(nproc) -C build
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
