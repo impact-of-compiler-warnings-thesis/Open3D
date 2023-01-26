@@ -42,25 +42,63 @@ jobs:
                            libtbb-dev \
                            libosmesa6-dev \
                            libudev-dev \
-                           libfilament-dev
+                           libfilament-dev \
+                           libvtk9-dev \
+                           libassimp-dev \
+                           libeigen3-dev \
+                           libfmt-dev \
+                           libglew-dev \
+                           libglfw3-dev \
+                           libgtest-dev \
+                           libimgui-dev \
+                           libjpeg-dev \
+                           libjsoncpp-dev \
+                           liblzf-dev \
+                           libmsgpack-dev \
+                           libnanoflann-dev \
+                           libpng-dev \
+                           pybind11-dev \
+                           libqhullcpp8.0 \
+                           libtbb-dev \
+                           libtinygltf-dev \
+                           libtinyobjloader-dev
       - name: Generate build files
         run: |
           mkdir build && cd build
           cmake .. -DCMAKE_BUILD_TYPE=Debug \
                    -DCMAKE_CXX_STANDARD=17 \
-                   -DCMAKE_C_COMPILER=clang-14 \
-                   -DCMAKE_CXX_COMPILER=clang++-14 \
-                   -DCPP_LIBRARY=/usr/lib/llvm-14/lib/libc++.so \
+                   -DCMAKE_C_COMPILER=/usr/bin/clang-14 \
+                   -DCMAKE_CXX_COMPILER=/usr/bin/clang++-14 \
                    -DBUILD_SHARED_LIBS=OFF \
                    -DBUILD_PYTHON_MODULE=OFF \
                    -DBUILD_UNIT_TESTS=ON \
                    -DBUILD_EXAMPLES=ON \
                    -DBUILD_BENCHMARKS=ON \
-                   -DBUILD_VTK_FROM_SOURCE=ON \
+                   -DBUILD_VTK_FROM_SOURCE=OFF \
                    -DBUILD_FILAMENT_FROM_SOURCE=OFF \
-                   -DBUILD_CURL_FROM_SOURCE=ON
+                   -DBUILD_CURL_FROM_SOURCE=ON \
+                   -DUSE_SYSTEM_ASSIMP=ON \
+                   -DUSE_SYSTEM_EIGEN3=ON \
+                   -DUSE_SYSTEM_FILAMENT=ON \
+                   -DUSE_SYSTEM_FMT=ON \
+                   -DUSE_SYSTEM_GLEW=ON \
+                   -DUSE_SYSTEM_GLFW=ON \
+                   -DUSE_SYSTEM_GOOGLETEST=ON \
+                   -DUSE_SYSTEM_IMGUI=ON \
+                   -DUSE_SYSTEM_JPEG=ON \
+                   -DUSE_SYSTEM_JSONCPP=ON \
+                   -DUSE_SYSTEM_LIBLZF=ON \
+                   -DUSE_SYSTEM_MSGPACK=ON \
+                   -DUSE_SYSTEM_NANOFLANN=ON \
+                   -DUSE_SYSTEM_PNG=ON \
+                   -DUSE_SYSTEM_PYBIND11=ON \
+                   -DUSE_SYSTEM_QHULLCPP=ON \
+                   -DUSE_SYSTEM_TBB=ON \
+                   -DUSE_SYSTEM_TINYGLTF=ON \
+                   -DUSE_SYSTEM_TINYOBJLOADER=ON \
+                   -DUSE_SYSTEM_ZEROMQ=OFF
       - name: Run build-wrapper
-        run: build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make -j$(nproc) -C build
+        run: build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make -j$(nproc) -C build Open3D
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
